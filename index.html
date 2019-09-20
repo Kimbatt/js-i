@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>title</title>
+
+<style>
+body
+{
+    background: #323639;
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+button
+{
+    background-color: #146dff;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 12px 15px 12px 15px;
+    margin: 5px 0px 5px 20px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.15s;
+    outline: none;
+}
+
+button:hover
+{
+    background-color: #54adff;
+    cursor: pointer;
+}
+
+button:disabled
+{
+    background-color: #77abff;
+    cursor: not-allowed;
+}
+
+textarea
+{
+    color: #ffffff;
+    background: #484D50;
+    border: 1px solid #bbbbbb;
+    font-family: "Consolas";
+    font-weight: bold;
+    font-size: 20px;
+    margin: 20px;
+    padding: 10px;
+    width: calc(100% - 65px);
+    height: 200px;
+    resize: none;
+}
+
+input[type="text"]
+{
+    font-family: "Consolas";
+    font-weight: bold;
+    font-size: 20px;
+    padding: 10px;
+    width: 200px;
+}
+</style>
+</head>
+<body>
+
+<textarea id="text-area" placeholder="Enter javascript code here..."></textarea>
+<div style="display: flex; align-items: center;">
+    <button onclick="Generate()" style="display: block;">Generate</button>
+    <label style="margin-left: 30px;" title="If checked, then the data url of the image will be embedded in the result code (so there is no need to save the image file).
+If not checked, then you need to save the image file, and place it to the path you entered (e.g. files/images/my_image.png). The image file must be served from the same origin as the script for it to work."
+        ><input type="checkbox" oninput="EmbedChanged()"> Embed image data URL</label>
+    <input id="image-path-input" style="margin-left: 30px;" type="text" placeholder="Path to image">
+</div>
+<div style="margin: 0px 20px; display: flex; align-items: center;">
+    <textarea style="margin-left: 0px;" id="result-text-area" placeholder="Code will appear here..." readonly></textarea>
+    <canvas id="result-canvas" style="height: 220px;"></canvas>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
