@@ -54,31 +54,66 @@ textarea
     resize: none;
 }
 
-input[type="text"]
+input[type="text"], input[type="number"]
 {
     font-family: "Consolas";
     font-weight: bold;
     font-size: 20px;
-    padding: 10px;
+    padding: 5px;
     width: 200px;
 }
+
+input[type="range"], input[type="file"]
+{
+    vertical-align: middle;
+}
+
+select
+{
+    font-size: 20px;
+    padding: 2px;
+}
+
 </style>
 </head>
 <body>
 
-<textarea id="text-area" placeholder="Enter javascript code here..."></textarea>
+<textarea id="text-area" placeholder="Enter javascript code here...">alert("asdf1234 🅱")</textarea>
 <div style="display: flex; align-items: center;">
     <button onclick="Generate()" style="display: block;">Generate</button>
+    <select style="margin-left: 30px;" oninput="ModeChanged(this)">
+        <option value="random">Generate a random image</option>
+        <option value="hide">Hide code in a selected image</option>
+    </select>
     <label style="margin-left: 30px;" title="If checked, then the data url of the image will be embedded in the result code (so there is no need to save the image file).
-If not checked, then you need to save the image file, and place it to the path you entered (e.g. files/images/my_image.png). The image file must be served from the same origin as the script for it to work."
+If not checked, then you need to save the image file, and place it to the path you entered (e.g. files/images/my_image.png).
+The image file must be served from the same origin as the script for it to work (or else you'll get a tainted canvas error)."
         ><input type="checkbox" oninput="EmbedChanged()"> Embed image data URL</label>
     <input id="image-path-input" style="margin-left: 30px;" type="text" placeholder="Path to image">
+    <input id="rng-seed" style="margin-left: 30px; width: 150px;" type="number" min="0" max="2147483647" step="1" value="" placeholder="RNG seed" title=
+    "This number will be used to seed a random number generator. The same seed will generate the same image. Leave empty for a random seed.">
 </div>
+
+<div id="image-selector" style="display: none; flex-direction: column; margin-top: 10px; margin-left: 30px;">
+    <div style="font-size: 24px; font-weight: bold; margin: 10px 0px;">Options</div>
+    <div style="font-size: 20px; margin: 10px 0px;">Select an image file: <input type="file" accept="image/*" onclick="this.value=null" oninput="FileSelected(this)"></div>
+    <div style="font-size: 20px; margin: 10px 0px;" title=
+"How many bits to use per pixel per channel to store the data.
+Less bits = less data can be hidden, but the changes to the image will be less noticeable.
+Using 8 bits is equivalent to just generating a random image; since all the bits are used up, nothing will remain of the original image."
+    >Image bit count: <span id="image-bitcount">1</span> <input type="range" min="1" max="8" step="1" value="1" oninput="ImageBitcountChanged(Number(this.value))"></div>
+    <label style="font-size: 20px; margin: 10px 0px;" title=
+"If checked, the remaining pixels of the image (that do not contain any data) will be filled up with random data.
+This will make the image more uniform, and will not change the result code."
+    >Fill remaining image with random data: <input id="fill-image-with-random-data-checkbox" type="checkbox" checked></label>
+</div>
+
 <div style="margin: 0px 20px; display: flex; align-items: center;">
     <textarea style="margin-left: 0px;" id="result-text-area" placeholder="Code will appear here..." readonly></textarea>
     <canvas id="result-canvas" style="height: 220px;"></canvas>
 </div>
+<button onclick="CopyResult(this)" onmouseleave="this.innerText='Copy this'" style="width: 150px;">Copy this</button>
 
-<script src="main.js"></script>
+<script src="dist/main.js"></script>
 </body>
 </html>
