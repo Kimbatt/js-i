@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="utf-8">
-<title>title</title>
+<title>js-i</title>
 
 <style>
 body
@@ -39,7 +39,7 @@ button:disabled
     cursor: not-allowed;
 }
 
-textarea
+textarea, input[type="text"], input[type="number"]
 {
     color: #ffffff;
     background: #484D50;
@@ -47,6 +47,10 @@ textarea
     font-family: "Consolas";
     font-weight: bold;
     font-size: 20px;
+}
+
+textarea
+{
     margin: 20px;
     padding: 10px;
     width: calc(100% - 65px);
@@ -56,9 +60,6 @@ textarea
 
 input[type="text"], input[type="number"]
 {
-    font-family: "Consolas";
-    font-weight: bold;
-    font-size: 20px;
     padding: 5px;
     width: 200px;
 }
@@ -70,26 +71,30 @@ input[type="range"], input[type="file"]
 
 select
 {
+    background: #484D50;
+    color: white;
     font-size: 20px;
-    padding: 2px;
+    padding: 5px;
 }
 
 </style>
 </head>
 <body>
 
-<textarea id="text-area" placeholder="Enter javascript code here...">alert("asdf1234 🅱")</textarea>
+<div style="margin-left: 30px; font-size: 40px; font-weight: bold;">js-i</div>
+<textarea id="text-area" placeholder="Enter javascript code here..." >alert("asdf1234 🅱")</textarea>
 <div style="display: flex; align-items: center;">
     <button onclick="Generate()" style="display: block;">Generate</button>
     <select style="margin-left: 30px;" oninput="ModeChanged(this)">
         <option value="random">Generate a random image</option>
         <option value="hide">Hide code in a selected image</option>
     </select>
-    <label style="margin-left: 30px;" title="If checked, then the data url of the image will be embedded in the result code (so there is no need to save the image file).
+    <label style="margin-left: 30px; font-size: 20px;" title="If checked, then the data url of the image will be embedded in the result code (so there is no need to save the image file).
 If not checked, then you need to save the image file, and place it to the path you entered (e.g. files/images/my_image.png).
 The image file must be served from the same origin as the script for it to work (or else you'll get a tainted canvas error)."
         ><input type="checkbox" oninput="EmbedChanged()"> Embed image data URL</label>
-    <input id="image-path-input" style="margin-left: 30px;" type="text" placeholder="Path to image">
+    <input id="image-path-input" style="margin-left: 30px;" type="text" placeholder="Path to image" title=
+    "The name and the path where the image will be loaded from, e.g. 'images/my_image.png'.">
     <input id="rng-seed" style="margin-left: 30px; width: 150px;" type="number" min="0" max="2147483647" step="1" value="" placeholder="RNG seed" title=
     "This number will be used to seed a random number generator. The same seed will generate the same image. Leave empty for a random seed.">
 </div>
@@ -106,13 +111,21 @@ Using 8 bits is equivalent to just generating a random image; since all the bits
 "If checked, the remaining pixels of the image (that do not contain any data) will be filled up with random data.
 This will make the image more uniform, and will not change the result code."
     >Fill remaining image with random data: <input id="fill-image-with-random-data-checkbox" type="checkbox" checked></label>
+    <div style="margin-top: 10px; font-size: 16px;">Note: transparency is not supported. Every pixel's alpha value will be set to 255.</div>
 </div>
 
 <div style="margin: 0px 20px; display: flex; align-items: center;">
-    <textarea style="margin-left: 0px;" id="result-text-area" placeholder="Code will appear here..." readonly></textarea>
+    <textarea style="margin-left: 0px; word-break: break-all;" id="result-text-area" placeholder="Code will appear here..." readonly></textarea>
     <canvas id="result-canvas" style="height: 220px;"></canvas>
 </div>
 <button onclick="CopyResult(this)" onmouseleave="this.innerText='Copy this'" style="width: 150px;">Copy this</button>
+<button onclick="SaveImage()" style="position: absolute; right: 30px;">Save image</button>
+
+<a href="https://github.com/Kimbatt/js-i" style="position: absolute; width: 32px; height: 32px; top: 20px; right: 20px;">
+    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="white" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+    </svg>
+</a>
 
 <script src="dist/main.js"></script>
 </body>

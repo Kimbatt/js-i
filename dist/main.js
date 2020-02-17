@@ -406,3 +406,19 @@ function CopyResult(button) {
     button.innerText = "Copied!";
     navigator.clipboard.writeText(resultTextArea.value);
 }
+async function SaveImage() {
+    const imagePathSegments = imagePathInput.value.trim().split("/");
+    let fileName = "image.png";
+    if (imagePathSegments.length !== 0) {
+        const last = imagePathSegments[imagePathSegments.length - 1];
+        if (/\S+\.png$/.test(last))
+            fileName = last;
+    }
+    const a = document.createElement("a");
+    a.download = fileName;
+    const blob = await new Promise((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject));
+    const blobUrl = window.URL.createObjectURL(blob);
+    a.href = blobUrl;
+    a.click();
+    window.URL.revokeObjectURL(blobUrl);
+}
